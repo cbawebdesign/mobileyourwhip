@@ -101,8 +101,8 @@ export const onSocialMediaShare = async (userId, feed, postOrImage) => {
   try {
     const result = await Share.share(
       {
-        subject: 'Download ReactNative Share App Now',
-        title: 'Download ReactNativeShare App Now',
+        subject: 'Check out this post',
+        title: 'YOURWHIP.COM',
         message: text,
         url: redirectUrl,
       },

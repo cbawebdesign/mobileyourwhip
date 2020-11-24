@@ -47,6 +47,9 @@ build/
 local.properties
 *.iml
 
+# Too Large Files
+*.hprof
+
 # node.js
 #
 node_modules/
