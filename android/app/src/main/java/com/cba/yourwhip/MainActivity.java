@@ -10,6 +10,9 @@ import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import expo.modules.splashscreen.singletons.SplashScreen;
 import expo.modules.splashscreen.SplashScreenImageResizeMode;
 
+import io.branch.rnbranch.*;
+import android.content.Intent;
+
 public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -38,4 +41,16 @@ public class MainActivity extends ReactActivity {
             }
         };
     }
+
+    @Override
+      protected void onStart() {
+          super.onStart();
+          RNBranchModule.initSession(getIntent().getData(), this);
+      }
+
+      @Override
+      public void onNewIntent(Intent intent) {
+          super.onNewIntent(intent);
+          RNBranchModule.onNewIntent(intent);
+      }
 }

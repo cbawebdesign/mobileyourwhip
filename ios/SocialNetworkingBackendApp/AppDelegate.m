@@ -1,5 +1,7 @@
 #import "AppDelegate.h"
 
+#import <RNBranch/RNBranch.h>
+
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -43,6 +45,8 @@ static void InitializeFlipper(UIApplication *application) {
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
+
+  [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];
   
   self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc] initWithModuleRegistryProvider:[[UMModuleRegistryProvider alloc] init]];
   self.launchOptions = launchOptions;
@@ -93,6 +97,17 @@ static void InitializeFlipper(UIApplication *application) {
   appController.bridge = [self initializeReactNativeApp];
   EXSplashScreenService *splashScreenService = (EXSplashScreenService *)[UMModuleRegistryProvider getSingletonModuleForClass:[EXSplashScreenService class]];
   [splashScreenService showSplashScreenFor:self.window.rootViewController];
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    if ([RNBranch application:app openURL:url options:options])  {
+        // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
+    }
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+    return [RNBranch continueUserActivity:userActivity];
 }
 
 @end

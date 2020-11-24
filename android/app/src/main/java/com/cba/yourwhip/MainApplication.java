@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import io.branch.rnbranch.RNBranchModule;
+
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
     new BasePackageList().getPackageList()
@@ -78,6 +80,9 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    
+    RNBranchModule.getAutoInstance(this);
+
     SoLoader.init(this, /* native exopackage */ false);
 
     if (!BuildConfig.DEBUG) {

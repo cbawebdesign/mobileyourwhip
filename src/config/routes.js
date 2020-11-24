@@ -6,6 +6,8 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator, useHeaderHeight } from '@react-navigation/stack';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as SecureStore from 'expo-secure-store';
+import branch from 'react-native-branch';
+import * as Linking from 'expo-linking';
 
 import { CustomText as Text, TITLE_FONT } from '../UI/text/CustomText';
 
@@ -48,6 +50,7 @@ import {
 
 import { storeToken, routeChecksComplete } from '../actions/auth';
 import { getUserInfo, setWalkthroughComplete } from '../actions/user';
+import { setDeepLinkSlug } from '../actions/general';
 
 import { userPropType } from './propTypes';
 import {
@@ -439,6 +442,8 @@ const NavigationContainerStack = ({
   walkthroughComplete,
   currentUser,
 }) => {
+  const dispatch = useDispatch();
+
   const theme = {
     ...DefaultTheme,
     colors: {
@@ -447,8 +452,70 @@ const NavigationContainerStack = ({
     },
   };
 
+  const linking = {
+    prefixes: ['yourwhip://', 'https://yourwhip.app.link'],
+
+    // Custom function to get the URL which was used to open the app
+    async getInitialURL() {
+      // First, you may want to do the default deep link handling
+      // Check if app was opened from a deep link
+      const url = await Linking.getInitialURL();
+
+      if (url != null) {
+        return url;
+      }
+
+      // Next, you would need to get the initial URL from your third-party integration
+      // It depends on the third-party SDK you use
+      // For example, to get to get the initial URL for branch.io:
+      const params = await branch.getFirstReferringParams();
+
+      return params?.$canonical_url;
+    },
+
+    // Custom function to subscribe to incoming links
+    subscribe(listener) {
+      // First, you may want to do the default deep link handling
+      const onReceiveURL = ({ url }) => listener(url);
+
+      // Listen to incoming links from deep linking
+      Linking.addEventListener('url', onReceiveURL);
+
+      // Next, you would need to subscribe to incoming links from your third-party integration
+      // For example, to get to subscribe to incoming links from branch.io:
+      const branchUnsubscribe = branch.subscribe(({ error, params, uri }) => {
+        if (error) {
+          console.error('Error from Branch: ' + error);
+          return;
+        }
+
+        // A BRANCH LINK WAS OPENED
+        if (params.slug) {
+          dispatch(setDeepLinkSlug(params.slug));
+        }
+
+        listener(uri);
+      });
+
+      return () => {
+        Linking.removeEventListener('url', onReceiveURL);
+        branchUnsubscribe();
+      };
+    },
+
+    config: {
+      screens: {
+        Explore: {
+          screens: {
+            ExploreDetail: 'detail/:postSlug',
+          },
+        },
+      },
+    },
+  };
+
   return (
-    <NavigationContainer theme={theme}>
+    <NavigationContainer theme={theme} linking={linking}>
       <RootStackScreen
         authToken={authToken}
         walkthroughComplete={walkthroughComplete}

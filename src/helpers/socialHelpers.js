@@ -92,7 +92,7 @@ export const onSharedImageNewCommentHelper = (feed, sharedImage, comments) => {
 export const onSocialMediaShare = async (userId, feed, postOrImage) => {
   let text = postOrImage.description ? postOrImage.description : '';
 
-  const redirectUrl = `https://bit.ly/2XmmQ7S`;
+  const redirectUrl = `https://yourwhip.app.link/detail${postOrImage._id}`;
 
   if (Platform.OS === 'android') text = text.concat(` ${redirectUrl}`);
   else text = text.concat('http://itunes.apple.com/app/id1453977874');
@@ -103,16 +103,18 @@ export const onSocialMediaShare = async (userId, feed, postOrImage) => {
         subject: 'Download ReactNative Share App Now',
         title: 'Download ReactNativeShare App Now',
         message: text,
-        url: 'app://reactnativeshare',
+        url: redirectUrl,
       },
       {
         dialogTitle: 'Share ReactNativeShare App',
         excludedActivityTypes: [],
       }
     );
+
     if (result.action === Share.sharedAction) {
       if (result.activityType) {
         const updatedFeed = onShareHelper(userId, feed, postOrImage);
+
         return { share: result, feed: updatedFeed };
       }
 

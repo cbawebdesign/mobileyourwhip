@@ -38,6 +38,7 @@ import { likePostPress, resetNewLikeCheck } from '../../actions/likes';
 import { sharePost, shareImage } from '../../actions/shares';
 import { likeImagePress } from '../../actions/detail';
 import { resetCommentUpdateCheck } from '../../actions/comments';
+import { resetDeepLinkSlug } from '../../actions/general';
 
 import {
   exploreItemPropType,
@@ -70,6 +71,7 @@ const Explore = ({
   deletedPost,
   fetching,
   success,
+  deepLinkSlug,
 }) => {
   const dispatch = useDispatch();
   const paddingBottom = useSafeArea().bottom;
@@ -288,7 +290,8 @@ const Explore = ({
       return;
     }
 
-    if (result.share.activityType) {
+    console.log(result.share);
+    if (result.share && result.share.activityType) {
       dispatch(
         sharePost({
           parentId: currentItem._id,
@@ -475,6 +478,19 @@ const Explore = ({
     }
   }, [success]);
 
+  useEffect(() => {
+    if (deepLinkSlug) {
+      navigation.navigate('ExploreDetail', {
+        ...route.params,
+        parentId: deepLinkSlug,
+      });
+    }
+
+    return () => {
+      dispatch(resetDeepLinkSlug());
+    };
+  }, [deepLinkSlug]);
+
   if (!feed || !currentUser) {
     return <View />;
   }
@@ -554,6 +570,7 @@ Explore.defaultProps = {
   commentsUpdateCheck: null,
   newLikeCheck: null,
   success: null,
+  deepLinkSlug: null,
 };
 
 Explore.propTypes = {
@@ -581,6 +598,7 @@ Explore.propTypes = {
   success: PropTypes.shape({
     reportPostSuccess: PropTypes.string,
   }),
+  deepLinkSlug: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
@@ -589,6 +607,7 @@ const mapStateToProps = (state) => {
   const { user } = state.user;
   const { commentsUpdateCheck } = state.comments;
   const { newLikeCheck } = state.likes;
+  const { deepLinkSlug } = state.general;
 
   return {
     homeFeed,
@@ -599,6 +618,7 @@ const mapStateToProps = (state) => {
     deletedPost,
     fetching,
     success,
+    deepLinkSlug,
   };
 };
 
