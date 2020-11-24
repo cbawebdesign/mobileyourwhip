@@ -32,6 +32,19 @@ public class MainActivity extends ReactActivity {
         return "main";
     }
 
+    // Override onStart, onNewIntent:
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RNBranchModule.initSession(getIntent().getData(), this);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        RNBranchModule.onNewIntent(intent);
+    }
+
     @Override
     protected ReactActivityDelegate createReactActivityDelegate() {
         return new ReactActivityDelegate(this, getMainComponentName()) {
@@ -41,16 +54,4 @@ public class MainActivity extends ReactActivity {
             }
         };
     }
-
-    @Override
-      protected void onStart() {
-          super.onStart();
-          RNBranchModule.initSession(getIntent().getData(), this);
-      }
-
-      @Override
-      public void onNewIntent(Intent intent) {
-          super.onNewIntent(intent);
-          RNBranchModule.onNewIntent(intent);
-      }
 }

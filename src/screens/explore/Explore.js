@@ -290,7 +290,6 @@ const Explore = ({
       return;
     }
 
-    console.log(result.share);
     if (result.share && result.share.activityType) {
       dispatch(
         sharePost({

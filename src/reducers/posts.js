@@ -37,7 +37,9 @@ const homeState = (state = initialState, action) => {
           action.result.skip === '0'
             ? action.result.homeFeed
             : [...state.homeFeed, ...action.result.homeFeed],
-        endOfList: action.result.homeFeed.length < PAGINATION_LIMIT,
+        endOfList:
+          action.result.homeFeed &&
+          action.result.homeFeed.length < PAGINATION_LIMIT,
         fetching: false,
         error: null,
       };
