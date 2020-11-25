@@ -50,6 +50,7 @@ import {
 
 import { storeToken, routeChecksComplete } from '../actions/auth';
 import { getUserInfo, setWalkthroughComplete } from '../actions/user';
+import { setDeepLinkSlug } from '../actions/general';
 
 import { userPropType } from './propTypes';
 import {
@@ -441,6 +442,8 @@ const NavigationContainerStack = ({
   walkthroughComplete,
   currentUser,
 }) => {
+  const dispatch = useDispatch();
+
   const theme = {
     ...DefaultTheme,
     colors: {
@@ -487,6 +490,7 @@ const NavigationContainerStack = ({
         }
 
         // A BRANCH LINK WAS OPENED
+        console.log(params);
         if (params.slug) {
           dispatch(setDeepLinkSlug(params.slug));
         }

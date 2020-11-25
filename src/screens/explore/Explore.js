@@ -494,6 +494,10 @@ const Explore = ({
     return <View />;
   }
 
+  if (feed && feed[0]) {
+    console.log(feed[0]._id);
+  }
+
   return (
     <ContainerView
       touchEnabled={false}
