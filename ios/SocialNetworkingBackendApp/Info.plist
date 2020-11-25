@@ -75,11 +75,11 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>branch_key</key>
-	<string>key_live_naUZ3H4qxFaduXaD7izWOochDAgWoCnx</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>branch_app_domain</key>
 	<string>yourwhip.app.link</string>
+	<key>branch_key</key>
+	<string>key_live_naUZ3H4qxFaduXaD7izWOochDAgWoCnx</string>
 </dict>
 </plist>

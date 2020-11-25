@@ -1,4 +1,5 @@
 import { Share, Platform, Alert } from 'react-native';
+import branch, { BranchEvent } from 'react-native-branch';
 
 export const onLikePressHelper = (
   userId,
@@ -95,9 +96,7 @@ export const onSocialMediaShare = async (userId, feed, postOrImage) => {
   const redirectUrl = `https://yourwhip.app.link/detail/?slug=${postOrImage._id}`;
 
   if (Platform.OS === 'android') text = text.concat(` ${redirectUrl}`);
-  else text = text.concat('http://itunes.apple.com/app/id1453977874');
 
-  console.log(postOrImage._id);
   try {
     const result = await Share.share(
       {

@@ -502,16 +502,6 @@ const NavigationContainerStack = ({
         branchUnsubscribe();
       };
     },
-
-    config: {
-      screens: {
-        Explore: {
-          screens: {
-            ExploreDetail: 'detail/:postSlug',
-          },
-        },
-      },
-    },
   };
 
   return (
