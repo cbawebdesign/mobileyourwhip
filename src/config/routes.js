@@ -490,7 +490,6 @@ const NavigationContainerStack = ({
         }
 
         // A BRANCH LINK WAS OPENED
-        console.log(params);
         if (params.slug) {
           dispatch(setDeepLinkSlug(params.slug));
         }
