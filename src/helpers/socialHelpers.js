@@ -1,4 +1,5 @@
 import { Share, Platform, Alert } from 'react-native';
+import branch, { BranchEvent } from 'react-native-branch';
 
 export const onLikePressHelper = (
   userId,
@@ -92,27 +93,28 @@ export const onSharedImageNewCommentHelper = (feed, sharedImage, comments) => {
 export const onSocialMediaShare = async (userId, feed, postOrImage) => {
   let text = postOrImage.description ? postOrImage.description : '';
 
-  const redirectUrl = `https://bit.ly/2XmmQ7S`;
+  const redirectUrl = `https://yourwhip.app.link/detail/?slug=${postOrImage._id}`;
 
   if (Platform.OS === 'android') text = text.concat(` ${redirectUrl}`);
-  else text = text.concat('http://itunes.apple.com/app/id1453977874');
 
   try {
     const result = await Share.share(
       {
-        subject: 'Download ReactNative Share App Now',
-        title: 'Download ReactNativeShare App Now',
+        subject: 'Check out this post',
+        title: 'YOURWHIP.COM',
         message: text,
-        url: 'app://reactnativeshare',
+        url: redirectUrl,
       },
       {
         dialogTitle: 'Share ReactNativeShare App',
         excludedActivityTypes: [],
       }
     );
+
     if (result.action === Share.sharedAction) {
       if (result.activityType) {
         const updatedFeed = onShareHelper(userId, feed, postOrImage);
+
         return { share: result, feed: updatedFeed };
       }
 

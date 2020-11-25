@@ -11,6 +11,7 @@ import timeline from './timeline';
 import profile from './profile';
 import galleries from './gallieries';
 import stats from './stats';
+import general from './general';
 
 const reducers = () =>
   combineReducers({
@@ -26,6 +27,7 @@ const reducers = () =>
     profile,
     galleries,
     stats,
+    general,
   });
 
 export default reducers;

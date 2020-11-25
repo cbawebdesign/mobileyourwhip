@@ -149,6 +149,7 @@ const ExploreDetail = ({
       feed,
       currentItem.item
     );
+
     if (result.share.activityType) {
       dispatch(
         shareImage({
