@@ -10,7 +10,6 @@
 #include <map>
 #include <mutex>
 #include <vector>
-#include "FlipperCertificateProvider.h"
 #include "FlipperConnectionImpl.h"
 #include "FlipperConnectionManager.h"
 #include "FlipperInitConfig.h"
@@ -86,10 +85,6 @@ class FlipperClient : public FlipperConnectionManager::Callbacks {
   void setStateListener(
       std::shared_ptr<FlipperStateUpdateListener> stateListener);
 
-  void setCertificateProvider(
-      const std::shared_ptr<FlipperCertificateProvider> provider);
-  std::shared_ptr<FlipperCertificateProvider> getCertificateProvider();
-
   std::shared_ptr<FlipperPlugin> getPlugin(const std::string& identifier);
 
   std::string getState();
@@ -113,8 +108,8 @@ class FlipperClient : public FlipperConnectionManager::Callbacks {
   std::mutex mutex_;
   std::shared_ptr<FlipperState> flipperState_;
 
-  void connect(std::shared_ptr<FlipperPlugin> plugin);
   void disconnect(std::shared_ptr<FlipperPlugin> plugin);
+  void startBackgroundPlugins();
   std::string callstack();
   void handleError(std::exception& e);
 };
