@@ -26,14 +26,7 @@ import {
 } from '../../helpers/socialHelpers';
 import { isCloseToBottom } from '../../helpers/scrollHelpers';
 
-import {
-  getHomeFeed,
-  deletePost,
-  resetDeletePost,
-  hidePost,
-  hidePostsByUser,
-} from '../../actions/posts';
-import { reportPost } from '../../actions/flagged';
+import { getHomeFeed, deletePost, resetDeletePost } from '../../actions/home';
 import { likePostPress, resetNewLikeCheck } from '../../actions/likes';
 import { sharePost, shareImage } from '../../actions/shares';
 import { likeImagePress } from '../../actions/detail';
@@ -45,7 +38,7 @@ import {
   userPropType,
   commentPropType,
 } from '../../config/propTypes';
-import { COMPOSE, PAGINATION_LIMIT } from '../../config/constants';
+import { PAGINATION_LIMIT } from '../../config/constants';
 
 import styles from '../styles';
 
@@ -70,15 +63,17 @@ const Explore = ({
   newLikeCheck,
   deletedPost,
   fetching,
+<<<<<<< HEAD
   success,
   deepLinkSlug,
+=======
+>>>>>>> b2848a3771bca7b3ab242af47815132c9c15f358
 }) => {
   const dispatch = useDispatch();
   const paddingBottom = useSafeArea().bottom;
 
   const [feed, setFeed] = useState(null);
   const [showPostOptions, setShowPostOptions] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const [imageShown, setImageShown] = useState([]);
@@ -87,94 +82,21 @@ const Explore = ({
   const [viewableItems, setViewableItems] = useState([]);
 
   const postOptions = {
-    title: 'Post Options',
-    body: 'Select one of the options below',
+    title: 'Delete post',
+    body: 'Are you sure you want to delete this post?',
+    buttonStyle: 'horizontal',
     buttons: [
       {
-        title: 'Edit post',
-        subtitle: 'Change how this post is displayed to other users',
-        onPress: () => {
-          navigation.navigate(COMPOSE, {
-            editPost: true,
-            item: currentItem,
-          });
-          setShowPostOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id !== currentUser._id,
+        title: 'Cancel',
+        onPress: () => setShowPostOptions(false),
       },
       {
-        title: 'Delete post',
-        subtitle: 'The post will no longer be visible to other users',
+        title: 'Delete',
         onPress: () => {
           const updatedFeed = onDeleteHelper(feed, currentItem);
 
           setFeed(updatedFeed);
           setShowPostOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id !== currentUser._id,
-      },
-      {
-        title: 'Hide post',
-        subtitle: 'The post will no longer show in your feed',
-        onPress: () => {
-          dispatch(hidePost(currentItem._id));
-          setShowPostOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id === currentUser._id,
-      },
-      {
-        title: `Hide all activity by ${
-          currentItem && currentItem.createdBy.firstName
-        }`,
-        subtitle: 'Your feed will hide all activity by this user',
-        onPress: () => {
-          dispatch(hidePostsByUser(currentItem.createdBy._id));
-          setShowPostOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id === currentUser._id,
-      },
-      {
-        title: `Report to admins`,
-        subtitle:
-          'Flag this post as inappropriate or not folowing community guidelines',
-        onPress: () => {
-          dispatch(reportPost(currentItem._id));
-          setShowPostOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id === currentUser._id,
-      },
-      {
-        title: 'Cancel',
-        onPress: () => setShowPostOptions(false),
-      },
-    ],
-  };
-
-  const successModalOptions = {
-    title: 'Post Successfully Reported',
-    body: success && success.reportPostSuccess ? success.reportPostSuccess : '',
-    buttonStyle: 'horizontal',
-    buttons: [
-      {
-        title: 'OK',
-        onPress: () => {
-          setShowSuccessModal(false);
-          dispatch({ type: 'RESET_SUCCESS' });
         },
       },
     ],
@@ -300,9 +222,7 @@ const Explore = ({
 
       setFeed(result.feed);
     } else if (result.share.action === 'sharedAction') {
-      dispatch(
-        sharePost({ parentId: currentItem._id, activityType: 'SOCIAL_SHARE' })
-      );
+      dispatch(sharePost({ parentId: currentItem._id }));
 
       setFeed(result.feed);
     }
@@ -403,6 +323,7 @@ const Explore = ({
       onLikePress={() => handleLikePress(item)}
       onSharePress={() => handleSharePress(item)}
       onProfilePress={(type) => handleProfilePress(type, item)}
+      enableOptions={item.createdBy._id === currentUser._id}
       onOptionsPress={() => handlePostOptionsPress(item)}
       onDeletePress={() => handleDeletePost('EXPLORE')}
       itemInView={viewableItems.some(
@@ -424,11 +345,8 @@ const Explore = ({
   );
 
   useEffect(() => {
-    // FETCH POSTS ON SCREEN LOAD
-    // REFETCH AFTER CURRENTUSER EDITS PROFILE IMAGE
-    if (currentUser) {
-      dispatch(getHomeFeed(0, PAGINATION_LIMIT));
-    }
+    // REFETCH ALFTER USER EDITS PROFILE IMAGE
+    dispatch(getHomeFeed(0, PAGINATION_LIMIT));
   }, [currentUser]);
 
   useEffect(() => {
@@ -471,6 +389,7 @@ const Explore = ({
     }
   }, [route, homeFeed, commentsUpdateCheck, newLikeCheck]);
 
+<<<<<<< HEAD
   useEffect(() => {
     if (success && success.reportPostSuccess) {
       setShowSuccessModal(success && success.reportPostSuccess.length > 0);
@@ -490,6 +409,8 @@ const Explore = ({
     };
   }, [deepLinkSlug]);
 
+=======
+>>>>>>> b2848a3771bca7b3ab242af47815132c9c15f358
   if (!feed || !currentUser) {
     return <View />;
   }
@@ -504,12 +425,6 @@ const Explore = ({
         onModalDismissPress={() => setShowPostOptions(false)}
         options={postOptions}
       />
-      <SelectionModal
-        showModal={showSuccessModal}
-        onModalDismissPress={() => setShowSuccessModal(false)}
-        options={successModalOptions}
-      />
-
       {showShareModal && (
         <ShareModal
           showModal={showShareModal}
@@ -568,8 +483,11 @@ Explore.defaultProps = {
   currentUser: null,
   commentsUpdateCheck: null,
   newLikeCheck: null,
+<<<<<<< HEAD
   success: null,
   deepLinkSlug: null,
+=======
+>>>>>>> b2848a3771bca7b3ab242af47815132c9c15f358
 };
 
 Explore.propTypes = {
@@ -594,15 +512,17 @@ Explore.propTypes = {
     fromScreen: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   }),
+<<<<<<< HEAD
   success: PropTypes.shape({
     reportPostSuccess: PropTypes.string,
   }),
   deepLinkSlug: PropTypes.string,
+=======
+>>>>>>> b2848a3771bca7b3ab242af47815132c9c15f358
 };
 
 const mapStateToProps = (state) => {
-  const { homeFeed, endOfList, deletedPost, fetching } = state.posts;
-  const { success } = state.flagged;
+  const { homeFeed, endOfList, deletedPost, fetching } = state.home;
   const { user } = state.user;
   const { commentsUpdateCheck } = state.comments;
   const { newLikeCheck } = state.likes;
@@ -616,8 +536,11 @@ const mapStateToProps = (state) => {
     newLikeCheck,
     deletedPost,
     fetching,
+<<<<<<< HEAD
     success,
     deepLinkSlug,
+=======
+>>>>>>> b2848a3771bca7b3ab242af47815132c9c15f358
   };
 };
 

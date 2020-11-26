@@ -101,6 +101,7 @@ export const mediaViewStyles = EStyleSheet.create({
     flexWrap: 'wrap',
     height: '$singleLargeImageHeight',
     width: VIEW_WIDTH - OUTER_CONTAINER_MARGIN_LEFT_RIGHT,
+    // backgroundColor: 'pink'
   },
   video: {
     flex: 1,

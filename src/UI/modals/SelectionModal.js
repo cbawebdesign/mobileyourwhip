@@ -83,7 +83,6 @@ const SelectionModal = ({
                 ]}
               >
                 {options.buttons.map((item, index) => {
-                  if (item.hide) return;
                   if (options.buttonStyle === 'horizontal') {
                     return (
                       <TextButton
@@ -102,7 +101,6 @@ const SelectionModal = ({
                       key={index.toString()}
                       icon={item.icon}
                       label={item.title}
-                      subtitle={item.subtitle}
                       onPress={item.onPress}
                     />
                   );

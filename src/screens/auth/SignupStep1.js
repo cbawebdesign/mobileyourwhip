@@ -19,8 +19,6 @@ import SelectionModal from '../../UI/modals/SelectionModal';
 
 import { signupStep1, resetMessages } from '../../actions/auth';
 
-import { useKeyboardState } from '../../config/hooks';
-
 import styles from '../styles';
 
 const backgroundImage = require('../../../assets/images/background.png');
@@ -29,7 +27,6 @@ const isIos = Platform.OS === 'ios';
 
 const SignupStep1 = ({ route, navigation, fetching, error, success }) => {
   const dispatch = useDispatch();
-  const { keyboardHeight } = useKeyboardState();
 
   const [firstName, setFirstname] = useState('');
   const [lastName, setLastName] = useState('');
@@ -189,7 +186,6 @@ const SignupStep1 = ({ route, navigation, fetching, error, success }) => {
         backgroundColor="transparent"
         loadingOptions={{ loading: fetching }}
         headerHeight={route.params.headerHeight}
-        enableKeyboardAvoidingView={false}
       >
         <SelectionModal
           showModal={showValidationError}
@@ -199,11 +195,12 @@ const SignupStep1 = ({ route, navigation, fetching, error, success }) => {
         />
         <ScrollView keyboardShouldPersistTaps="always">
           <View style={styles.topView}>
-            <LogoView title="SIGN UP" active={false} />
+            <LogoView title="SIGN UP" />
           </View>
           <View style={styles.inputView}>
             <AuthInputView inputOptions={inputBlockOptions} signup />
           </View>
+<<<<<<< HEAD
           <View
             style={[
               styles.buttonView,
@@ -216,6 +213,9 @@ const SignupStep1 = ({ route, navigation, fetching, error, success }) => {
                 },
             ]}
           >
+=======
+          <View style={styles.buttonView}>
+>>>>>>> b2848a3771bca7b3ab242af47815132c9c15f358
             <AuthButtonView
               onStartPress={handleStartPress}
               mainButtonText="NEXT"

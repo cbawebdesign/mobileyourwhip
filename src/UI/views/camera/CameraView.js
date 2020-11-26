@@ -160,7 +160,7 @@ const CameraView = ({
             style={[styles.counter, { paddingTop: paddingTop + 16 }]}
           />
         )}
-        <FooterView height={85} hasGradient>
+        <FooterView isLarge hasGradient>
           <CameraControlsView
             onShootPress={onShootPress}
             onRotatePress={onRotatePress}

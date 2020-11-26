@@ -11,15 +11,12 @@ import SelectionModal from '../../UI/modals/SelectionModal';
 
 import { resetPassword, resetMessages, storeToken } from '../../actions/auth';
 
-import { useKeyboardState } from '../../config/hooks';
-
 import styles from '../styles';
 
 const backgroundImage = require('../../../assets/images/background.png');
 
 const Password = ({ route, navigation, success, error, authToken }) => {
   const dispatch = useDispatch();
-  const { keyboardHeight } = useKeyboardState();
 
   const [password, setPassword] = useState('');
   const [passwordActive, setPasswordActive] = useState(false);
@@ -93,8 +90,6 @@ const Password = ({ route, navigation, success, error, authToken }) => {
   };
 
   const handleStartPress = () => {
-    handleRemoveKeyboard();
-
     if (password.length < 8) {
       setShowModal(true);
       setShowModalMessage({
@@ -105,12 +100,11 @@ const Password = ({ route, navigation, success, error, authToken }) => {
       dispatch(resetPassword(password));
     }
 
+    handleRemoveKeyboard();
     setPassword('');
   };
 
   useEffect(() => {
-    handleRemoveKeyboard();
-
     if (success && success.passwordUpdateSuccess) {
       setShowModalMessage({
         title: 'Password updated',
@@ -128,7 +122,6 @@ const Password = ({ route, navigation, success, error, authToken }) => {
         onPress={handleRemoveKeyboard}
         backgroundColor="transparent"
         headerHeight={route.params.headerHeight}
-        enableKeyboardAvoidingView={false}
       >
         <SelectionModal
           showModal={showModal}
@@ -137,20 +130,12 @@ const Password = ({ route, navigation, success, error, authToken }) => {
           onModalDismissPress={() => setShowModal(false)}
         />
         <View style={styles.topView}>
-          <LogoView title="CREATE PASSWORD" />
+          <LogoView title="SIGN IN" />
         </View>
         <View style={styles.inputView}>
           <AuthInputView inputOptions={inputBlockOptions} />
         </View>
-        <View
-          style={[
-            styles.buttonView,
-            { marginBottom: 50 },
-            passwordActive && {
-              marginBottom: keyboardHeight + 25,
-            },
-          ]}
-        >
+        <View style={styles.buttonView}>
           <AuthButtonView
             onStartPress={handleStartPress}
             mainButtonText="NEXT"

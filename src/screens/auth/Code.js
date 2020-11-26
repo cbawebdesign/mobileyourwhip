@@ -13,15 +13,12 @@ import SelectionModal from '../../UI/modals/SelectionModal';
 
 import { validateCode, requestCode, resetMessages } from '../../actions/auth';
 
-import { useKeyboardState } from '../../config/hooks';
-
 import styles from '../styles';
 
 const backgroundImage = require('../../../assets/images/background.png');
 
 const Code = ({ route, navigation, fetching, success, error, email }) => {
   const dispatch = useDispatch();
-  const { keyboardHeight } = useKeyboardState();
 
   const [code, setCode] = useState('');
   const [codeActive, setCodeActive] = useState(false);
@@ -101,8 +98,6 @@ const Code = ({ route, navigation, fetching, success, error, email }) => {
   };
 
   useEffect(() => {
-    handleRemoveKeyboard();
-
     if (success && success.validateCodeSuccess) {
       dispatch(resetMessages());
       navigation.navigate('Password');
@@ -119,7 +114,6 @@ const Code = ({ route, navigation, fetching, success, error, email }) => {
         backgroundColor="transparent"
         headerHeight={route.params.headerHeight}
         loadingOptions={{ loading: fetching }}
-        enableKeyboardAvoidingView={false}
       >
         <SelectionModal
           showModal={showModal}
@@ -128,19 +122,12 @@ const Code = ({ route, navigation, fetching, success, error, email }) => {
           onModalDismissPress={() => setShowModal(false)}
         />
         <View style={styles.topView}>
-          <LogoView title="ENTER CODE" />
+          <LogoView title="SHARE" />
         </View>
         <View style={styles.inputView}>
           <AuthInputView inputOptions={inputBlockOptions} />
         </View>
-        <View
-          style={[
-            styles.buttonView,
-            codeActive && {
-              marginBottom: keyboardHeight + 25,
-            },
-          ]}
-        >
+        <View style={styles.buttonView}>
           <AuthButtonView
             onStartPress={handleStartPress}
             mainButtonText="NEXT"

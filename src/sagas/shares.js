@@ -8,7 +8,7 @@ import {
 } from '../actions/shares';
 import { API_HOST } from '../config/constants';
 
-import { composePost } from './posts';
+import { composePost } from './home';
 
 const fetchSharePost = ({ action, token }) =>
   fetch(`${API_HOST}/share-post/`, {
@@ -20,7 +20,7 @@ const fetchSharePost = ({ action, token }) =>
     },
     body: JSON.stringify({
       parentId: action.data.parentId,
-      activityType: action.data.activityType,
+      activityType: action.data.sharedAactivityTypection,
     }),
   });
 
@@ -54,9 +54,6 @@ export function* sharePost(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: SHARE_POST_PRESS_ERROR, error: result.error });
     } else {
       yield put({ type: SHARE_POST_PRESS_RESULT, result });
@@ -80,9 +77,6 @@ export function* shareImage(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: SHARE_IMAGE_PRESS_ERROR, error: result.error });
     } else {
       yield put({ type: SHARE_IMAGE_PRESS_RESULT, result });

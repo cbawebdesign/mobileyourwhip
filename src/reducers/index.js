@@ -2,8 +2,7 @@ import { combineReducers } from 'redux';
 import auth from './auth';
 import user from './user';
 import likes from './likes';
-import posts from './posts';
-import flagged from './flagged';
+import home from './posts';
 import detail from './detail';
 import comments from './comments';
 import replies from './replies';
@@ -18,8 +17,7 @@ const reducers = () =>
     auth,
     user,
     likes,
-    posts,
-    flagged,
+    home,
     detail,
     comments,
     replies,

@@ -149,6 +149,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>GoogleAds-IMA-iOS-SDK.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>OpenSSL-Universal.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -195,11 +200,6 @@
 			<false/>
 		</dict>
 		<key>RNScreens.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>React-Core-AccessibilityResources.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -255,11 +255,6 @@
 			<false/>
 		</dict>
 		<key>React-RCTVibration.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>React-callinvoker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -390,6 +385,11 @@
 			<false/>
 		</dict>
 		<key>react-native-safe-area-context.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>react-native-video.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

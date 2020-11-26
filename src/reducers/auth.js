@@ -1,5 +1,3 @@
-import * as SecureStore from 'expo-secure-store';
-
 import {
   LOGIN,
   LOGIN_RESULT,
@@ -29,23 +27,17 @@ import {
   DELETE_ACCOUNT,
   ROUTE_CHECKS_COMPLETE,
 } from '../actions/auth';
-import { USER_INFO_ERROR } from '../actions/user';
 
 const initialState = {
   fetching: true,
   error: null,
   success: null,
-  signupData: null,
   firstName: '',
   lastName: '',
   signupEmail: '',
   signupPassword: '',
   authToken: null,
   user: null,
-};
-
-const signoutUser = async () => {
-  await SecureStore.deleteItemAsync('token');
 };
 
 const authState = (state = initialState, action) => {
@@ -64,6 +56,7 @@ const authState = (state = initialState, action) => {
     case LOGOUT:
     case DELETE_ACCOUNT:
     case REQUEST_CODE:
+    case SIGNUP_STEP2:
     case RESET_PASSWORD:
     case VALIDATE_CODE:
       return {
@@ -96,13 +89,6 @@ const authState = (state = initialState, action) => {
       return {
         ...state,
         fetching: true,
-        signupData: {
-          ...state.signupData,
-          firstName: action.data.firstName,
-          lastName: action.data.lastName,
-          signupEmail: action.data.email,
-          signupPassword: action.data.password,
-        },
         firstName: action.data.firstName,
         lastName: action.data.lastName,
         signupEmail: action.data.email,
@@ -117,18 +103,6 @@ const authState = (state = initialState, action) => {
           signupStep1Success: action.result.success,
         },
         error: null,
-      };
-    case SIGNUP_STEP2:
-      return {
-        ...state,
-        fetching: false,
-        signupData: {
-          ...state.signupData,
-          birthday: action.userInfo.birthday,
-          gender: action.userInfo.gender,
-          location: action.userInfo.location,
-          profileImage: action.userInfo.profileImage,
-        },
       };
     case SIGNUP_RESULT:
       return {
@@ -183,8 +157,7 @@ const authState = (state = initialState, action) => {
           ...state.success,
           accountDeleteSuccess: action.result.success,
         },
-        authToken:
-          action.result.fromScreen === 'SETTINGS' ? null : state.authToken,
+        authToken: null,
         error: null,
       };
     case RESET_MESSAGES:
@@ -255,30 +228,6 @@ const authState = (state = initialState, action) => {
           ...state.error,
           deleteError: action.error,
         },
-      };
-    case USER_INFO_ERROR:
-      SecureStore.deleteItemAsync('token');
-
-      return {
-        ...state,
-        error: action.error,
-        token: null,
-      };
-    case 'INVALID_TOKEN':
-      signoutUser(state);
-
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          invalidToken: true,
-        },
-        authToken: null,
-      };
-    case 'RESET_ERROR':
-      return {
-        ...state,
-        error: null,
       };
     default:
       return state;

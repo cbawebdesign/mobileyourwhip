@@ -30,7 +30,7 @@ import { isCloseToBottom } from '../helpers/scrollHelpers';
 
 import { getProfile, followUserPress } from '../actions/profile';
 import { likePostPress } from '../actions/likes';
-import { deletePost, resetDeletePost } from '../actions/posts';
+import { deletePost, resetDeletePost } from '../actions/home';
 import { resetCommentUpdateCheck } from '../actions/comments';
 import { editProfile } from '../actions/user';
 import { sharePost, shareImage } from '../actions/shares';
@@ -76,7 +76,6 @@ const Profile = ({
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareMessage, setShareMessage] = useState('');
   const [imageShown, setImageShown] = useState([]);
-  const [viewableItems, setViewableItems] = useState([]);
 
   const postOptions = {
     title: 'Delete post',
@@ -90,7 +89,6 @@ const Profile = ({
       {
         title: 'Delete',
         onPress: () => {
-          // FEED UPDATED LOCALLY
           const updatedFeed = onDeleteHelper(feed, currentItem);
 
           setFeed(updatedFeed);
@@ -251,14 +249,6 @@ const Profile = ({
     setFeed(updatedFeed);
   };
 
-  const onViewRef = useRef((itemsInView) => {
-    if (itemsInView.viewableItems !== viewableItems) {
-      setViewableItems(itemsInView.viewableItems);
-    }
-  }).current;
-  const viewConfigRef = React.useRef({ viewAreaCoveragePercentThreshold: 50 })
-    .current;
-
   const renderListHeader = () => (
     <View
       style={[
@@ -402,15 +392,11 @@ const Profile = ({
             onCommentsPress={() => handleCommentsPress(item)}
             onLikePress={() => handleLikePress(item)}
             onProfilePress={() => handleProfilePress(item)}
+            enableOptions={currentUser._id === user._id}
             onOptionsPress={() => handlePostOptionsPress(item)}
             onDeletePress={() => handleDeletePost('PROFILE')}
-            itemInView={viewableItems.some(
-              (viewable) => viewable.item._id === item._id
-            )}
           />
         )}
-        onViewableItemsChanged={onViewRef}
-        viewabilityConfig={viewConfigRef}
         ListFooterComponent={renderListFooterComponent()}
         onScroll={({ nativeEvent }) => {
           if (fetching || endOfList) return;
@@ -480,7 +466,7 @@ const mapStateToProps = (state) => {
   const { user } = state.user;
   const { userData, socialData, endOfList, fetching } = state.profile;
   const { commentsUpdateCheck } = state.comments;
-  const { deletedPost } = state.posts;
+  const { deletedPost } = state.home;
 
   return {
     currentUser: user,

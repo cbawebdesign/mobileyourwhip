@@ -39,9 +39,6 @@ export function* getOnePost(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: DETAIL_POST_ERROR, error: result.error });
     } else {
       yield put({ type: DETAIL_POST_RESULT, result });
@@ -59,9 +56,6 @@ export function* likeImagePress(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: LIKE_IMAGE_PRESS_ERROR, error: result.error });
     } else {
       yield put({ type: LIKE_IMAGE_PRESS_RESULT, result });

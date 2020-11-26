@@ -1,6 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Dimensions } from 'react-native';
-import { COLORS } from '../../config/constants';
 
 const VIEW_WIDTH = Dimensions.get('window').width;
 
@@ -90,9 +89,6 @@ export const iconLabelButtonStyles = EStyleSheet.create({
   label: {
     letterSpacing: 1,
   },
-  subtitle: {
-    fontSize: 13,
-  },
 });
 
 export const imagePickerButtonStyles = EStyleSheet.create({
@@ -102,7 +98,6 @@ export const imagePickerButtonStyles = EStyleSheet.create({
     resizeMode: 'cover',
     marginLeft: 4,
     marginBottom: 4,
-    borderColor: COLORS.white,
   },
   videoDuration: {
     color: '$white',

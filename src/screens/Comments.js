@@ -22,12 +22,8 @@ import {
   getCommentFeed,
   likeCommentPress,
   composeNewComment,
-  editComment,
   deleteComment,
-  hideComment,
-  hideCommentsByUser,
 } from '../actions/comments';
-import { reportComment } from '../actions/flagged';
 
 import styles from './styles';
 
@@ -48,7 +44,6 @@ const Comments = ({
   updateReplyCheck,
   currentUser,
   fetching,
-  success,
 }) => {
   const dispatch = useDispatch();
   const { keyboardShowing } = useKeyboardState();
@@ -59,110 +54,25 @@ const Comments = ({
 
   const [feed, setFeed] = useState([]);
   const [comment, setComment] = useState('');
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showCommentOptions, setShowCommentOptions] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
-  const [commentViewHeight, setCommentViewHeight] = useState(60);
-  const [editingComment, setEditingComment] = useState(false);
 
   const commentOptions = {
-    title: 'Comment Options',
-    body: 'Select one of the options below',
+    title: 'Delete comment',
+    body: 'Are you sure you want to delete this comment?',
+    buttonStyle: 'horizontal',
     buttons: [
       {
-        title: 'Edit comment',
-        subtitle: 'Change how this comment is displayed to other users',
-        onPress: () => {
-          setComment(currentItem.description);
-          setEditingComment(true);
-          setShowCommentOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id !== currentUser._id,
+        title: 'Cancel',
+        onPress: () => setShowCommentOptions(false),
       },
       {
-        title: 'Delete comment',
-        subtitle: 'The comment will no longer be visible to other users',
+        title: 'Delete',
         onPress: () => {
           const updatedFeed = onDeleteHelper(feed, currentItem);
 
           setFeed(updatedFeed);
           setShowCommentOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id !== currentUser._id,
-      },
-      {
-        title: 'Hide comment',
-        subtitle: 'The comment will no longer show in your feed',
-        onPress: () => {
-          dispatch(
-            hideComment({ parentId, commentId: currentItem._id, type: 'POST' })
-          );
-          setShowCommentOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id === currentUser._id,
-      },
-      {
-        title: `Hide all activity by ${
-          currentItem && currentItem.createdBy.firstName
-        }`,
-        subtitle: 'Your feed will hide all activity by this user',
-        onPress: () => {
-          dispatch(
-            hideCommentsByUser({
-              parentId,
-              userId: currentItem.createdBy._id,
-              type: 'POST',
-            })
-          );
-          setShowCommentOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id === currentUser._id,
-      },
-      {
-        title: `Report to admins`,
-        subtitle:
-          'Flag this comment as inappropriate or not folowing community guidelines',
-        onPress: () => {
-          dispatch(reportComment(currentItem._id));
-          setShowCommentOptions(false);
-        },
-        hide:
-          currentItem &&
-          currentUser &&
-          currentItem.createdBy._id === currentUser._id,
-      },
-      {
-        title: 'Cancel',
-        onPress: () => setShowCommentOptions(false),
-      },
-    ],
-  };
-
-  const successModalOptions = {
-    title: 'Comment Successfully Reported',
-    body:
-      success && success.reportCommentSuccess
-        ? success.reportCommentSuccess
-        : '',
-    buttonStyle: 'horizontal',
-    buttons: [
-      {
-        title: 'OK',
-        onPress: () => {
-          setShowSuccessModal(false);
-          dispatch({ type: 'RESET_SUCCESS' });
         },
       },
     ],
@@ -184,27 +94,15 @@ const Comments = ({
       return;
     }
 
-    if (editingComment) {
-      dispatch(
-        editComment({
-          type: route.params.type,
-          fromScreen: route.params.fromScreen,
-          commentId: currentItem._id,
-          parentId,
-          description: comment,
-        })
-      );
-      setEditingComment(false);
-    } else {
-      dispatch(
-        composeNewComment({
-          type: route.params.type,
-          fromScreen: route.params.fromScreen,
-          parentId,
-          description: comment,
-        })
-      );
-    }
+    dispatch(
+      composeNewComment({
+        type: route.params.type,
+        fromScreen: route.params.fromScreen,
+        parentId,
+        description: comment,
+        photo: null,
+      })
+    );
 
     setComment('');
     handleRemoveKeyboard();
@@ -291,10 +189,7 @@ const Comments = ({
       })
     );
 
-    return () => {
-      dispatch({ type: 'RESET_SUCCESS' });
-      dispatch({ type: 'RESET_COMMENT_FEED' });
-    };
+    return () => dispatch({ type: 'RESET_COMMENT_FEED' });
   }, []);
 
   useEffect(() => {
@@ -305,12 +200,6 @@ const Comments = ({
       updateReplyButtonView();
     }
   }, [commentFeed, updateReplyCheck]);
-
-  useEffect(() => {
-    if (success && success.reportCommentSuccess) {
-      setShowSuccessModal(success && success.reportCommentSuccess.length > 0);
-    }
-  }, [success]);
 
   if (!currentUser) {
     return <View />;
@@ -325,11 +214,6 @@ const Comments = ({
         showModal={showCommentOptions}
         onModalDismissPress={() => setShowCommentOptions(false)}
         options={commentOptions}
-      />
-      <SelectionModal
-        showModal={showSuccessModal}
-        onModalDismissPress={() => setShowSuccessModal(false)}
-        options={successModalOptions}
       />
       <AnimatedFlatList
         contentContainerStyle={styles.contentContainer}
@@ -346,6 +230,7 @@ const Comments = ({
             onLikePress={() => handleLikePress(item)}
             onReplyPress={() => handleReplyPress(item)}
             onProfilePress={() => handleProfilePress(item)}
+            enableOptions={item.createdBy._id === currentUser._id}
             onOptionsPress={() => handleCommentOptionsPress(item)}
             onDeletePress={() => handleDeleteComment()}
           />
@@ -359,14 +244,11 @@ const Comments = ({
         color="transparent"
         hasGradient
         keyboardActive={keyboardShowing}
-        height={commentViewHeight > 60 ? commentViewHeight : 60}
       >
         <CommentComposeView
           onComposePress={handleComposePress}
           onCommentChange={(text) => setComment(text)}
           commentValue={comment}
-          onHeightChange={(height) => setCommentViewHeight(height)}
-          editComment={editingComment}
         />
       </FooterView>
     </ContainerView>
@@ -375,7 +257,6 @@ const Comments = ({
 
 Comments.defaultProps = {
   updateReplyCheck: null,
-  success: null,
 };
 
 Comments.propTypes = {
@@ -391,15 +272,11 @@ Comments.propTypes = {
   }),
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   fetching: PropTypes.bool.isRequired,
-  success: PropTypes.shape({
-    reportCommentSuccess: PropTypes.string,
-  }),
 };
 
 const mapStateToProps = (state) => {
   const { commentFeed, fetching } = state.comments;
   const { updateReplyCheck } = state.replies;
-  const { success } = state.flagged;
   const { user } = state.user;
 
   return {
@@ -407,7 +284,6 @@ const mapStateToProps = (state) => {
     updateReplyCheck,
     currentUser: user,
     fetching,
-    success,
   };
 };
 

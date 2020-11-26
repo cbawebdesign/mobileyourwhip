@@ -3,9 +3,7 @@
 <plist version="1.0">
   <dict>
     <key>EXUpdatesSDKVersion</key>
-    <string>39.0.0</string>
-    <key>EXUpdatesURL</key>
-    <string>https://exp.host/@cbaweb/social-networking-backend-app</string>
+    <string>38.0.0</string>
     <key>EXUpdatesEnabled</key>
     <true/>
     <key>EXUpdatesCheckOnLaunch</key>

@@ -33,13 +33,9 @@ export const logoViewStyles = EStyleSheet.create({
     margin: 47,
   },
   title: {
-    textAlign: 'center',
     color: '$white',
     fontSize: 24,
     letterSpacing: 20,
-    lineHeight: 40,
-    paddingLeft: 25,
-    paddingRight: 25,
   },
 });
 
@@ -174,22 +170,17 @@ export const commentComposeViewStyles = EStyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     top: 0,
     left: 0,
     width: '100%',
-    padding: 12,
+    height: 60,
+    paddingLeft: 12,
+    paddingRight: 12,
   },
-  commentView: {
-    paddingLeft: 25,
-    width: '85%',
-  },
-  editTitle: { paddingBottom: 12 },
   input: {
     flex: 1,
-    minHeight: 40,
-    paddingTop: 12,
-    fontSize: 15,
+    paddingLeft: 25,
   },
   moreIcon: {
     width: 25,

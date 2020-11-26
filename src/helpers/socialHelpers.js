@@ -93,9 +93,14 @@ export const onSharedImageNewCommentHelper = (feed, sharedImage, comments) => {
 export const onSocialMediaShare = async (userId, feed, postOrImage) => {
   let text = postOrImage.description ? postOrImage.description : '';
 
+<<<<<<< HEAD
   const redirectUrl = `https://yourwhip.app.link/detail/?slug=${postOrImage._id}`;
 
   if (Platform.OS === 'android') text = text.concat(` ${redirectUrl}`);
+=======
+  if (Platform.OS === 'android') text = text.concat('https://bit.ly/2XmmQ7S');
+  else text = text.concat('http://itunes.apple.com/app/id1453977874');
+>>>>>>> b2848a3771bca7b3ab242af47815132c9c15f358
 
   try {
     const result = await Share.share(
