@@ -142,13 +142,10 @@ const ExploreDetail = ({
   };
 
   const handleShareOptionsPress = async () => {
+    console.log(currentItem);
     // PROCESS SHARE WITH SOCIAL MEDIA
     // AND UPDATE FEED LOCAL STATE
-    const result = await onSocialMediaShare(
-      currentUser._id,
-      feed,
-      currentItem.item
-    );
+    const result = await onSocialMediaShare(currentUser._id, feed, post);
 
     if (result.share.activityType) {
       dispatch(
@@ -162,6 +159,8 @@ const ExploreDetail = ({
       dispatch(sharePost({ parentId: currentItem.item._id }));
       setFeed(result.feed);
     }
+
+    setShowShareModal(false);
   };
 
   const handleDeletePost = () => {
