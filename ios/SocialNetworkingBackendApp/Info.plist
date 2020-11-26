@@ -15,11 +15,11 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>2.0.0</string>
+    <string>1.0.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>7</string>
+    <string>1</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
@@ -36,7 +36,7 @@
       </dict>
     </dict>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Social Networkding Backend App requires your location so that we can set user profile location info.</string>
+    <string/>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
@@ -50,23 +50,12 @@
     </array>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
-
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Social Networkding Backend App requires your location so that we can set user profile location info.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Social Networkding Backend App requires your location so that we can set user profile location info.</string>
-    <key>NSLocationUsageDescription</key>
-    <string>Social Networkding Backend App requires your location so that we can set user profile location info.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>Social Networkding Backend App needs access to your camera to enable uploading photos and videos to your posts.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Social Networkding Backend App needs access to your microphone to enable sound when creating video posts.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Social Networkding Backend App needs access to your library to enable uploading media to your posts.</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Social Networkding Backend App needs access to your library to enable saving media to your library.</string>
-    <key>CFBundleDisplayName</key>
-    <string>Social Networking Backend App</string>
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleDefault</string>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>location</string>
+    </array>
     <key>UIRequiresFullScreen</key>
     <true/>
     <key>CFBundleURLTypes</key>
@@ -74,9 +63,11 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.knowlephant.share</string>
+          <string>com.cbaweb.yourwhip</string>
         </array>
       </dict>
     </array>
+    <key>CFBundleDisplayName</key>
+    <string>Social Networking Backend App</string>
   </dict>
 </plist>

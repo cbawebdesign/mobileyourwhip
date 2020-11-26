@@ -1,6 +1,6 @@
 const DEVELOPMENT_API_HOST = 'http://localhost:4000';
 const PRODUCTION_API_HOST = 'https://test440yw.herokuapp.com';
-
+// cbawebdesign1@gmail.com / 12345678
 const development = false;
 
 export const API_HOST = development
@@ -41,7 +41,6 @@ export const SELECTIONS = [
 export const LOGIN = 'Login';
 export const SIGNUP_STEP_1 = 'Signup (Step 1)';
 export const SIGNUP_STEP_2 = 'Signup (Step 2)';
-export const SIGNUP_STEP_3 = 'Finish Signing Up';
 export const HELP = 'Help';
 export const CODE = 'Code';
 export const PASSWORD = 'Password';
@@ -62,7 +61,6 @@ export const TIMELINE = 'Timeline';
 export const SETTINGS = 'Settings';
 export const STATS = 'Stats';
 export const EXPLORE_DETAIL = 'ExploreDetail';
-export const FLAGGED = 'Flagged';
 
 export const COMPOSE = 'Compose';
 export const NAVIGATION = 'Navigation';
@@ -72,8 +70,8 @@ export const REPLIES = 'Replies';
 
 // CHANGE COLOR SETTINGS
 export const COLORS = {
-  primary1: '#3b5998',
-  primary2: '#FFFFFF',
+  primary1: '#FD7E7E',
+  primary2: '#FDD87E',
   backgroundGray: '#DDDDDD',
   black: '#020202',
   white: '#fff',

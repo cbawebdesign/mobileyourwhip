@@ -112,7 +112,6 @@ const fetchDeleteAccount = ({ token, action }) =>
     },
     body: JSON.stringify({
       userId: action.userId,
-      fromScreen: action.fromScreen,
     }),
   });
 
@@ -168,32 +167,25 @@ export function* signupStep1(action) {
   }
 }
 
-export function* signupStep3(action) {
-  const {
-    firstName,
-    lastName,
-    signupEmail,
-    signupPassword,
-    birthday,
-    gender,
-    location,
-    profileImage,
-  } = yield select((state) => state.auth.signupData);
+export function* signupStep2(action) {
+  const { firstName, lastName, signupEmail, signupPassword } = yield select(
+    (state) => state.auth
+  );
 
   const formData = new FormData();
   formData.append('firstName', firstName);
   formData.append('lastName', lastName);
   formData.append('email', signupEmail);
   formData.append('password', signupPassword);
-  if (birthday) {
-    formData.append('birthday', birthday.toString());
+  if (action.userInfo.birthday) {
+    formData.append('birthday', action.userInfo.birthday.toString());
   }
-  formData.append('gender', gender);
-  formData.append('location', location);
+  formData.append('gender', action.userInfo.gender);
+  formData.append('location', action.userInfo.location);
   formData.append('description', PERSONAL_DESCRIPTION);
-  if (profileImage && profileImage.uri) {
+  if (action.userInfo.profileImage.uri) {
     formData.append('profileImage', {
-      uri: profileImage.uri,
+      uri: action.userInfo.profileImage.uri,
       type: 'image/jpg',
       name: 'profileImage',
     });
@@ -257,9 +249,6 @@ export function* resetPassword(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: RESET_PASSWORD_ERROR, error: result.error });
     } else {
       yield put({ type: RESET_PASSWORD_RESULT, result });
@@ -279,10 +268,8 @@ export function* deleteAccount(action) {
     if (result.error) {
       yield put({ type: DELETE_ACCOUNT_ERROR, error: result.error });
     } else {
-      if (result.fromScreen === 'SETTINGS') {
-        SecureStore.deleteItemAsync('token');
-        SecureStore.deleteItemAsync('walkthroughComplete');
-      }
+      SecureStore.deleteItemAsync('token');
+      SecureStore.deleteItemAsync('walkthroughComplete');
 
       yield put({ type: DELETE_ACCOUNT_RESULT, result });
     }

@@ -36,7 +36,6 @@ import {
   COMMENTS,
   SEARCH,
   REPLIES,
-  SIGNUP_STEP_3,
 } from '../config/constants';
 
 const closeIcon = require('../../assets/icons/close.png');
@@ -60,7 +59,7 @@ const styles = EStyleSheet.create({
   },
 });
 
-export const getHeaderTitleHelper = (route, navigation, currentUser = null) => {
+export const getHeaderTitleHelper = (route, navigation) => {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Start';
 
   const stack = navigation.dangerouslyGetState().routes[
@@ -116,8 +115,6 @@ export const getHeaderTitleHelper = (route, navigation, currentUser = null) => {
         return { text: EXPLORE };
       }
       return { text: '' };
-    case COMPOSE:
-      return { text: childStack.params.editPost ? 'Edit' : COMPOSE };
     case LOGIN:
     case CAMERA:
       return { text: '' };
@@ -177,25 +174,6 @@ export const getHeaderTitleHelper = (route, navigation, currentUser = null) => {
           </>
         ),
       };
-    case NAVIGATION:
-      return {
-        view: (
-          <>
-            <Text
-              text={NAVIGATION}
-              fontFamily={TITLE_FONT}
-              style={styles.header}
-            />
-            {currentUser && currentUser.isAdmin && (
-              <Text
-                text="Admin account"
-                fontFamily={BODY_FONT}
-                style={styles.subHeader}
-              />
-            )}
-          </>
-        ),
-      };
     case 'ImagePicker':
       return { text: MEDIA_ALBUMS };
     case DISCOVER:
@@ -204,9 +182,7 @@ export const getHeaderTitleHelper = (route, navigation, currentUser = null) => {
       return { text: 'My profile' };
     case COMMENTS:
     case REPLIES:
-      return {
-        text: childStack && childStack.params ? childStack.params.title : '',
-      };
+      return { text: childStack.params.title };
     case SEARCH:
       return null;
     default:
@@ -300,7 +276,6 @@ export const getHeaderLeftHelper = (route, navigation) => {
       );
     case SIGNUP_STEP_1:
     case SIGNUP_STEP_2:
-    case SIGNUP_STEP_3:
     case HELP:
     case CODE:
     case PASSWORD:

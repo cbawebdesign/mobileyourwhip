@@ -50,14 +50,10 @@ class FlipperConnectionManagerImpl : public FlipperConnectionManager {
       std::unique_ptr<FlipperResponder> responder) override;
 
   void reconnect();
-  void setCertificateProvider(
-      const std::shared_ptr<FlipperCertificateProvider> provider) override;
-  std::shared_ptr<FlipperCertificateProvider> getCertificateProvider() override;
 
  private:
   bool isOpen_ = false;
   bool isStarted_ = false;
-  std::shared_ptr<FlipperCertificateProvider> certProvider_ = nullptr;
   Callbacks* callbacks_;
   DeviceData deviceData_;
   std::shared_ptr<FlipperState> flipperState_;
@@ -72,8 +68,8 @@ class FlipperConnectionManagerImpl : public FlipperConnectionManager {
   std::shared_ptr<ConnectionContextStore> contextStore_;
 
   void startSync();
-  bool doCertificateExchange();
-  bool connectSecurely();
+  void doCertificateExchange();
+  void connectSecurely();
   bool isCertificateExchangeNeeded();
   void requestSignedCertFromFlipper();
   bool isRunningInOwnThread();

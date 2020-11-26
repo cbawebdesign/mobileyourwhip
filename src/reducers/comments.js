@@ -5,16 +5,10 @@ import {
   LIKE_COMMENT_PRESS_ERROR,
   NEW_COMMENT_RESULT,
   NEW_COMMENT_ERROR,
-  EDIT_COMMENT_RESULT,
-  EDIT_COMMENT_ERROR,
   RESET_COMMENT_UPDATE_CHECK,
   GET_COMMENT_FEED,
   DELETE_COMMENT_RESULT,
   DELETE_COMMENT_ERROR,
-  HIDE_COMMENT_RESULT,
-  HIDE_COMMENT_ERROR,
-  HIDE_COMMENTS_BY_USER_RESULT,
-  HIDE_COMMENTS_BY_USER_ERROR,
 } from '../actions/comments';
 
 const initialState = {
@@ -26,7 +20,7 @@ const initialState = {
   commentsUpdateCheck: null,
 };
 
-const commentState = (state = initialState, action) => {
+const homeState = (state = initialState, action) => {
   switch (action.type) {
     case GET_COMMENT_FEED: {
       return {
@@ -62,13 +56,6 @@ const commentState = (state = initialState, action) => {
         },
         error: null,
       };
-    case EDIT_COMMENT_RESULT:
-      return {
-        ...state,
-        commentFeed: action.result.comments,
-        success: action.result.success,
-        error: null,
-      };
     case RESET_COMMENT_UPDATE_CHECK:
       return {
         ...state,
@@ -96,25 +83,10 @@ const commentState = (state = initialState, action) => {
         },
         commentFeed: action.result.comments,
       };
-    case HIDE_COMMENT_RESULT:
-      return {
-        ...state,
-        commentFeed: action.result,
-        error: null,
-      };
-    case HIDE_COMMENTS_BY_USER_RESULT:
-      return {
-        ...state,
-        commentFeed: action.result,
-        error: null,
-      };
     case COMMENT_FEED_ERROR:
     case LIKE_COMMENT_PRESS_ERROR:
     case NEW_COMMENT_ERROR:
     case DELETE_COMMENT_ERROR:
-    case HIDE_COMMENT_ERROR:
-    case HIDE_COMMENTS_BY_USER_ERROR:
-    case EDIT_COMMENT_ERROR:
       return {
         ...state,
         error: action.error,
@@ -125,4 +97,4 @@ const commentState = (state = initialState, action) => {
   }
 };
 
-export default commentState;
+export default homeState;

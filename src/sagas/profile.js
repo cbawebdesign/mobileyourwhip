@@ -42,9 +42,6 @@ export function* getProfile(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: PROFILE_ERROR, error: result.error });
     } else {
       yield put({ type: PROFILE_RESULT, result });
@@ -62,9 +59,6 @@ export function* followUserPress(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: FOLLOW_USER_PRESS_ERROR, error: result.error });
     } else {
       yield put({ type: FOLLOW_USER_PRESS_RESULT, result });

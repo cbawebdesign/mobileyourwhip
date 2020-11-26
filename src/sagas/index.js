@@ -3,7 +3,7 @@ import { takeEvery } from 'redux-saga/effects';
 import {
   LOGIN,
   SIGNUP_STEP1,
-  SIGNUP_STEP3,
+  SIGNUP_STEP2,
   LOGOUT,
   REQUEST_CODE,
   VALIDATE_CODE,
@@ -14,7 +14,7 @@ import {
   login,
   logout,
   signupStep1,
-  signupStep3,
+  signupStep2,
   requestCode,
   validateCode,
   resetPassword,
@@ -46,39 +46,8 @@ import { likePostPress } from './likes';
 import { SHARE_POST_PRESS, SHARE_IMAGE_PRESS } from '../actions/shares';
 import { sharePost, shareImage } from './shares';
 
-import {
-  GET_HOME_FEED,
-  CREATE_NEW_POST,
-  EDIT_POST,
-  DELETE_POST,
-  HIDE_POST,
-  HIDE_POSTS_BY_USER,
-} from '../actions/posts';
-import {
-  getHomeFeed,
-  composePost,
-  editPost,
-  deletePost,
-  hidePost,
-  hidePostsByUser,
-} from './posts';
-
-import {
-  GET_FLAGGED_POSTS_FEED,
-  GET_FLAGGED_COMMENTS_FEED,
-  REPORT_POST,
-  UNFLAG_POST,
-  UNFLAG_COMMENT,
-  REPORT_COMMENT,
-} from '../actions/flagged';
-import {
-  getFlaggedPostsFeed,
-  getFlaggedCommentsFeed,
-  reportPost,
-  unflagPost,
-  unflagComment,
-  reportComment,
-} from './flagged';
+import { GET_HOME_FEED, CREATE_NEW_POST, DELETE_POST } from '../actions/home';
+import { getHomeFeed, composePost, deletePost } from './home';
 
 import { GET_DETAIL_POST, LIKE_IMAGE_PRESS } from '../actions/detail';
 import { getOnePost, likeImagePress } from './detail';
@@ -90,19 +59,13 @@ import {
   GET_COMMENT_FEED,
   LIKE_COMMENT_PRESS,
   COMPOSE_NEW_COMMENT,
-  EDIT_COMMENT,
   DELETE_COMMENT,
-  HIDE_COMMENT,
-  HIDE_COMMENTS_BY_USER,
 } from '../actions/comments';
 import {
   getCommentFeed,
   likeCommentPress,
   composeComment,
-  editComment,
   deleteComment,
-  hideComment,
-  hideCommentsByUser,
 } from './comments';
 
 import {
@@ -118,8 +81,8 @@ import {
   deleteReply,
 } from './replies';
 
-import { GET_GALLERY_FEED, DELETE_GALLERY } from '../actions/galleries';
-import { getGalleryFeed, deleteGallery } from './galleries';
+import { GET_GALLERY_FEED } from '../actions/galleries';
+import { getGalleryFeed } from './galleries';
 
 import { GET_TIMELINE_FEED } from '../actions/timeline';
 import { getTimelineFeed } from './timeline';
@@ -132,7 +95,7 @@ export default function* rootSaga() {
   yield takeEvery(LOGIN, login);
   yield takeEvery(LOGOUT, logout);
   yield takeEvery(SIGNUP_STEP1, signupStep1);
-  yield takeEvery(SIGNUP_STEP3, signupStep3);
+  yield takeEvery(SIGNUP_STEP2, signupStep2);
   yield takeEvery(GET_USER_INFO, getUserInfo);
   yield takeEvery(REQUEST_CODE, requestCode);
   yield takeEvery(VALIDATE_CODE, validateCode);
@@ -146,17 +109,7 @@ export default function* rootSaga() {
   // HOME
   yield takeEvery(GET_HOME_FEED, getHomeFeed);
   yield takeEvery(CREATE_NEW_POST, composePost);
-  yield takeEvery(EDIT_POST, editPost);
   yield takeEvery(DELETE_POST, deletePost);
-  yield takeEvery(HIDE_POST, hidePost);
-  yield takeEvery(HIDE_POSTS_BY_USER, hidePostsByUser);
-
-  // FLAGGED
-  yield takeEvery(GET_FLAGGED_POSTS_FEED, getFlaggedPostsFeed);
-  yield takeEvery(GET_FLAGGED_COMMENTS_FEED, getFlaggedCommentsFeed);
-  yield takeEvery(REPORT_POST, reportPost);
-  yield takeEvery(UNFLAG_POST, unflagPost);
-  yield takeEvery(UNFLAG_COMMENT, unflagComment);
 
   // POST DETAIL
   yield takeEvery(GET_DETAIL_POST, getOnePost);
@@ -167,11 +120,7 @@ export default function* rootSaga() {
   yield takeEvery(GET_COMMENT_FEED, getCommentFeed);
   yield takeEvery(LIKE_COMMENT_PRESS, likeCommentPress);
   yield takeEvery(COMPOSE_NEW_COMMENT, composeComment);
-  yield takeEvery(EDIT_COMMENT, editComment);
   yield takeEvery(DELETE_COMMENT, deleteComment);
-  yield takeEvery(HIDE_COMMENT, hideComment);
-  yield takeEvery(HIDE_COMMENTS_BY_USER, hideCommentsByUser);
-  yield takeEvery(REPORT_COMMENT, reportComment);
 
   // REPLIES
   yield takeEvery(GET_REPLY_FEED, getReplyFeed);
@@ -188,7 +137,6 @@ export default function* rootSaga() {
 
   // GALLERY
   yield takeEvery(GET_GALLERY_FEED, getGalleryFeed);
-  yield takeEvery(DELETE_GALLERY, deleteGallery);
 
   // PEOPLE / USER
   yield takeEvery(UPDATE_INTERESTS, updateInterests);

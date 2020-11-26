@@ -12,16 +12,14 @@ import DualTextButtonView from '../../UI/views/footer/DualTextButtonView';
 import SelectionModal from '../../UI/modals/SelectionModal';
 
 import { login, resetMessages } from '../../actions/auth';
-
-import { useKeyboardState } from '../../config/hooks';
+import { resetUser } from '../../actions/user';
 
 import styles from '../styles';
 
-const backgroundImage = require('../../../assets/images/porsche.png');
+const backgroundImage = require('../../../assets/images/background.png');
 
 const Login = ({ route, navigation, error, success, fetching }) => {
   const dispatch = useDispatch();
-  const { keyboardHeight } = useKeyboardState();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -158,13 +156,6 @@ const Login = ({ route, navigation, error, success, fetching }) => {
         title: 'Authentication Error',
         body: error.loginError,
       });
-    } else if (error && error.invalidToken) {
-      setModalMessage({
-        title: 'Authentication Error',
-        body:
-          'Your authentication session has expired. Please try to login again.',
-      });
-      setShowModal(true);
     } else if (success && success.accountDeleteSuccess) {
       setModalMessage({
         title: 'Account deleted',
@@ -172,8 +163,6 @@ const Login = ({ route, navigation, error, success, fetching }) => {
       });
       setShowModal(true);
     }
-
-    return () => dispatch({ type: 'RESET_ERROR' });
   }, [error, success]);
 
   return (
@@ -183,7 +172,6 @@ const Login = ({ route, navigation, error, success, fetching }) => {
         backgroundColor="transparent"
         loadingOptions={{ loading: fetching }}
         headerHeight={route.params.headerHeight}
-        enableKeyboardAvoidingView={false}
       >
         <SelectionModal
           showModal={showModal}
@@ -201,9 +189,6 @@ const Login = ({ route, navigation, error, success, fetching }) => {
           style={[
             styles.buttonView,
             (emailActive || passwordActive) && styles.$active,
-            (emailActive || passwordActive) && {
-              marginBottom: keyboardHeight + 25,
-            },
           ]}
         >
           <AuthButtonView
@@ -239,9 +224,7 @@ Login.propTypes = {
     navigate: PropTypes.func.isRequired,
   }).isRequired,
   fetching: PropTypes.bool.isRequired,
-  error: PropTypes.objectOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
-  ),
+  error: PropTypes.objectOf(PropTypes.string),
   success: PropTypes.objectOf(PropTypes.string),
 };
 
