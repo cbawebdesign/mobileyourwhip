@@ -92,9 +92,7 @@ export const onSharedImageNewCommentHelper = (feed, sharedImage, comments) => {
 export const onSocialMediaShare = async (userId, feed, postOrImage) => {
   let text = postOrImage.description ? postOrImage.description : '';
 
-  const redirectUrl = `https://bit.ly/2XmmQ7S`;
-
-  if (Platform.OS === 'android') text = text.concat(` ${redirectUrl}`);
+  if (Platform.OS === 'android') text = text.concat('https://bit.ly/2XmmQ7S');
   else text = text.concat('http://itunes.apple.com/app/id1453977874');
 
   try {

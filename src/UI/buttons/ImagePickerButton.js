@@ -12,7 +12,6 @@ const ImagePickerButton = ({
   selected,
   mediaType,
   videoDuration,
-  disabled,
 }) => {
   const getDuration = () => {
     const minutes = Math.floor(videoDuration / 60);
@@ -22,14 +21,13 @@ const ImagePickerButton = ({
   };
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.9} disabled={disabled}>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
       <Image
         source={{ uri }}
         style={[
           styles.imagePickerImage,
           {
-            borderWidth: selected ? 5 : 0,
-            opacity: disabled ? 0.3 : 1,
+            opacity: selected ? 0.3 : 1,
           },
         ]}
       />
@@ -46,7 +44,6 @@ const ImagePickerButton = ({
 
 ImagePickerButton.defaultProps = {
   videoDuration: null,
-  disabled: false,
 };
 
 ImagePickerButton.propTypes = {
@@ -55,7 +52,6 @@ ImagePickerButton.propTypes = {
   selected: PropTypes.bool.isRequired,
   mediaType: PropTypes.string.isRequired,
   videoDuration: PropTypes.number,
-  disabled: PropTypes.bool,
 };
 
 export default ImagePickerButton;

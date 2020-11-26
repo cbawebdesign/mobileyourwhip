@@ -12,7 +12,6 @@ import { CustomText as Text, TITLE_FONT } from '../UI/text/CustomText';
 import Login from '../screens/auth/Login';
 import SignupStep1 from '../screens/auth/SignupStep1';
 import SignupStep2 from '../screens/auth/SignupStep2';
-import SignupStep3 from '../screens/auth/SignupStep3';
 import Help from '../screens/auth/Help';
 import Code from '../screens/auth/Code';
 import Password from '../screens/auth/Password';
@@ -30,7 +29,6 @@ import Settings from '../screens/Settings';
 import Stats from '../screens/stats/Stats';
 import ExploreDetail from '../screens/explore/ExploreDetail';
 import Replies from '../screens/Replies';
-import Flagged from '../screens/flagged/Flagged';
 
 import Search from '../screens/Search';
 import Navigation from '../screens/Navigation';
@@ -54,7 +52,6 @@ import {
   LOGIN,
   SIGNUP_STEP_1,
   SIGNUP_STEP_2,
-  SIGNUP_STEP_3,
   HELP,
   CODE,
   PASSWORD,
@@ -77,7 +74,6 @@ import {
   COMMENTS,
   SEARCH,
   REPLIES,
-  FLAGGED,
 } from './constants';
 
 // APP APPLIES 5 SEPERATE NAVIGATION STACKS
@@ -119,7 +115,7 @@ const AuthStackScreen = () => {
   const headerHeight = useHeaderHeight();
 
   return (
-    <AuthNavigationStack.Navigator headerMode="none">
+    <AuthNavigationStack.Navigator>
       <AuthNavigationStack.Screen
         name={LOGIN}
         component={Login}
@@ -133,11 +129,6 @@ const AuthStackScreen = () => {
       <AuthNavigationStack.Screen
         name={SIGNUP_STEP_2}
         component={SignupStep2}
-        initialParams={{ headerHeight }}
-      />
-      <AuthNavigationStack.Screen
-        name={SIGNUP_STEP_3}
-        component={SignupStep3}
         initialParams={{ headerHeight }}
       />
       <AuthNavigationStack.Screen
@@ -155,11 +146,6 @@ const AuthStackScreen = () => {
         component={Password}
         initialParams={{ headerHeight }}
       />
-      <AuthNavigationStack.Screen
-        name="ImagePicker"
-        component={ImagePickerStackStackScreen}
-        initialParams={{ headerHeight }}
-      />
       <AuthNavigationStack.Screen name={CAMERA} component={Camera} />
     </AuthNavigationStack.Navigator>
   );
@@ -169,7 +155,7 @@ const WalkthroughStackScreen = () => {
   const headerHeight = useHeaderHeight();
 
   return (
-    <WalkthroughNavigationStack.Navigator headerMode="none">
+    <WalkthroughNavigationStack.Navigator>
       <WalkthroughNavigationStack.Screen
         name={WALKTHROUGH}
         component={WalkthroughStep1}
@@ -188,16 +174,16 @@ const ImagePickerStackStackScreen = ({ route }) => {
   const { headerHeight } = route.params;
 
   return (
-    <ImagePickerStack.Navigator headerMode="none">
+    <ImagePickerStack.Navigator>
       <ImagePickerStack.Screen
         name={MEDIA_ALBUMS}
         component={ImagePicker}
-        initialParams={{ ...route.params, headerHeight }}
+        initialParams={{ headerHeight }}
       />
       <ImagePickerStack.Screen
         name={MEDIA}
         component={ImagePickerDetail}
-        initialParams={{ ...route.params, headerHeight }}
+        initialParams={{ headerHeight }}
       />
     </ImagePickerStack.Navigator>
   );
@@ -207,15 +193,10 @@ const MainStackScreen = ({ route }) => {
   const { headerHeight } = route.params;
 
   return (
-    <MainNavigationStack.Navigator headerMode="none">
+    <MainNavigationStack.Navigator>
       <MainNavigationStack.Screen
         name={EXPLORE}
         component={Explore}
-        initialParams={{ headerHeight }}
-      />
-      <MainNavigationStack.Screen
-        name={FLAGGED}
-        component={Flagged}
         initialParams={{ headerHeight }}
       />
       <MainNavigationStack.Screen
@@ -276,7 +257,7 @@ const PopupStackScreen = () => {
   const headerHeight = useHeaderHeight();
 
   return (
-    <PopupNavigationStack.Navigator mode="modal" headerMode="none">
+    <PopupNavigationStack.Navigator mode="modal">
       <PopupNavigationStack.Screen
         name="Main"
         component={MainStackScreen}
@@ -409,19 +390,16 @@ const RootStackScreen = ({ authToken, walkthroughComplete, currentUser }) => {
             headerRight: () =>
               getHeaderRightHelper(route, navigation, currentUser),
             headerTitle: () => {
-              if (!getHeaderTitleHelper(route, navigation, currentUser)) {
+              if (!getHeaderTitleHelper(route, navigation)) {
                 return null;
               }
-              if (getHeaderTitleHelper(route, navigation, currentUser).view) {
-                return getHeaderTitleHelper(route, navigation, currentUser)
-                  .view;
+              if (getHeaderTitleHelper(route, navigation).view) {
+                return getHeaderTitleHelper(route, navigation).view;
               }
 
               return (
                 <Text
-                  text={
-                    getHeaderTitleHelper(route, navigation, currentUser).text
-                  }
+                  text={getHeaderTitleHelper(route, navigation).text}
                   fontFamily={TITLE_FONT}
                   style={styles.header}
                 />

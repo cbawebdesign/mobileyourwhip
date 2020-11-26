@@ -103,14 +103,14 @@ export const getTimeHelper = (dateTime, showTime = false) => {
   }
 
   if (timeDifference < minute * 60) {
-    return `${Math.ceil(timeDifference / (minute * 60) / 5) * 5} Minutes`;
+    return `${Math.ceil(timeDifference / (minute * 60) / 5) * 5} Mins`;
   }
 
   if (differenceInHours > 0 && differenceInHours < 24) {
     return `${
       differenceInHours === 1
-        ? `${differenceInHours} Hour`
-        : `${differenceInHours} Hours`
+        ? `${differenceInHours} Hr`
+        : `${differenceInHours} Hrs`
     }`;
   }
 
@@ -124,8 +124,8 @@ export const getTimeHelper = (dateTime, showTime = false) => {
 
   return `${
     differenceInMonths === 1
-      ? `${differenceInMonths} Month`
-      : `${differenceInMonths} Months`
+      ? `${differenceInMonths} Mth`
+      : `${differenceInMonths} Mths`
   }`;
 };
 

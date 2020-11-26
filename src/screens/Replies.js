@@ -40,7 +40,6 @@ const Replies = ({ route, navigation, replyFeed, currentUser, fetching }) => {
   const [reply, setReply] = useState('');
   const [showReplyOptions, setShowReplyOptions] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
-  const [commentViewHeight, setCommentViewHeight] = useState(60);
 
   const replyOptions = {
     title: 'Delete reply',
@@ -66,9 +65,9 @@ const Replies = ({ route, navigation, replyFeed, currentUser, fetching }) => {
     Keyboard.dismiss();
   };
 
-  const handleProfilePress = ({ createdBy }) => {
+  const handleProfilePress = ({ user }) => {
     navigation.navigate('Profile', {
-      user: createdBy,
+      user,
     });
   };
 
@@ -139,7 +138,6 @@ const Replies = ({ route, navigation, replyFeed, currentUser, fetching }) => {
       onLikePress={() => handleLikePress(route.params.post, 'COMMENT')}
       onReplyPress={() => null}
       onProfilePress={() => handleProfilePress(route.params.comment)}
-      onOptionsPress={null} // TODO: ADD COMMENT OPTIONS
       isComment
     />
   );
@@ -200,6 +198,7 @@ const Replies = ({ route, navigation, replyFeed, currentUser, fetching }) => {
             onReplyPress={() => null}
             onProfilePress={() => handleProfilePress(item)}
             isReply
+            enableOptions={item.createdBy._id === currentUser._id}
             onOptionsPress={() => handleReplyOptionsPress(item)}
             onDeletePress={() => handleDeleteReply(item)}
           />
@@ -213,14 +212,11 @@ const Replies = ({ route, navigation, replyFeed, currentUser, fetching }) => {
         color="transparent"
         hasGradient
         keyboardActive={keyboardShowing}
-        height={commentViewHeight > 60 ? commentViewHeight : 60}
       >
         <CommentComposeView
           onComposePress={handleComposePress}
           onCommentChange={(text) => setReply(text)}
           commentValue={reply}
-          onHeightChange={(height) => setCommentViewHeight(height)}
-          editComment={false}
         />
       </FooterView>
     </ContainerView>

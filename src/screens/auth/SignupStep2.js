@@ -22,7 +22,6 @@ import { editProfile } from '../../actions/user';
 
 import { userPropType } from '../../config/propTypes';
 import { getMonthHelper } from '../../helpers/dateTimeHelper';
-import { CAMERA, SIGNUP_STEP_2, SIGNUP_STEP_3 } from '../../config/constants';
 
 import styles from '../styles';
 
@@ -61,8 +60,6 @@ const SignUpStep2 = ({
   const [locationActive, setlocationActive] = useState(false);
   const [address, setAddress] = useState(null);
   const [locationError, setLocationError] = useState(null);
-  const [showImageTypeModal, setShowImageTypeModal] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const inputBlockOptions = [
     {
@@ -93,23 +90,6 @@ const SignUpStep2 = ({
       onPress: () => handleInputPress('LOCATION'),
     },
   ];
-
-  const imageTypeOptions = {
-    title: 'Make your selection',
-    body: 'Select an image from your album or take a picture',
-    buttons: [
-      {
-        title: 'Select from album',
-        icon: arrowRightIcon,
-        onPress: () => handleSelectionPress('SELECT_FROM_ALBUM'),
-      },
-      {
-        title: 'Take a picture',
-        icon: arrowRightIcon,
-        onPress: () => handleSelectionPress('TAKE_PICTURE'),
-      },
-    ],
-  };
 
   const genderOptions = {
     title: 'Select your gender',
@@ -179,44 +159,41 @@ const SignUpStep2 = ({
         setlocationActive(false);
         break;
       case 'LOCATION':
-        if (!address) {
-          getLocationPermissions();
-        } else {
-          setlocationActive(true);
-        }
         setbirthdayActive(false);
         setgenderActive(false);
+        setlocationActive(true);
         break;
       default:
         break;
     }
   };
 
-  const handleSelectionPress = (type) => {
-    // EMPTY EXISTING PARAMS BEFORE SETTING NEW ONES
-    navigation.setParams({
-      ...route.params,
-      photo: null,
-      selection: null,
-      video: null,
+  const handlePhotoPress = () => {
+    navigation.navigate('Camera', {
+      type: 'PHOTO',
+      fromScreen: 'Signup (Step 2)',
     });
+  };
 
-    switch (type) {
-      case 'SELECT_FROM_ALBUM':
-        navigation.navigate('ImagePicker', {
-          fromScreen: SIGNUP_STEP_2,
-        });
-        setShowImageTypeModal(false);
-        break;
-      case 'TAKE_PICTURE':
-        navigation.navigate(CAMERA, {
-          type: 'PHOTO',
-          fromScreen: SIGNUP_STEP_2,
-        });
-        setShowImageTypeModal(false);
-        break;
-      default:
-        break;
+  const handleStartPress = () => {
+    if (fromScreen === 'SETTINGS') {
+      dispatch(
+        editProfile({
+          profileImage: photo || currentUser.profileImage,
+          birthday,
+          gender,
+          location,
+        })
+      );
+    } else {
+      dispatch(
+        signupStep2({
+          profileImage: photo || '',
+          birthday,
+          gender,
+          location,
+        })
+      );
     }
   };
 
@@ -241,39 +218,13 @@ const SignUpStep2 = ({
     setgenderActive(false);
   };
 
-  const handleStartPress = () => {
-    if (fromScreen === 'SETTINGS') {
-      dispatch(
-        editProfile({
-          profileImage: photo || currentUser.profileImage,
-          birthday,
-          gender,
-          location,
-        })
-      );
-    } else {
-      dispatch(
-        signupStep2({
-          profileImage: photo || '',
-          birthday,
-          gender,
-          location,
-        })
-      );
-      navigation.navigate(SIGNUP_STEP_3);
-    }
-  };
-
   const getLocationPermissions = async () => {
     const { status } = await Location.requestPermissionsAsync();
 
     if (status !== 'granted') {
       setLocationError('Permission to access location was denied');
-
-      return;
     }
 
-    setLoading(true);
     const locationObject = await Location.getCurrentPositionAsync({});
     const addressObject = await Location.reverseGeocodeAsync({
       latitude: locationObject.coords.latitude,
@@ -281,13 +232,10 @@ const SignUpStep2 = ({
     });
 
     setAddress(`${addressObject[0].city}, ${addressObject[0].country}`);
-
-    setlocationActive(true);
-    setLoading(false);
   };
 
   useEffect(() => {
-    handleRemoveKeyboard();
+    getLocationPermissions();
 
     navigation.setParams({
       ...route.params,
@@ -307,14 +255,9 @@ const SignUpStep2 = ({
       <ContainerView
         onPress={handleRemoveKeyboard}
         backgroundColor="transparent"
-        loadingOptions={{ loading: fetching || loading }}
+        loadingOptions={{ loading: fetching }}
         headerHeight={route.params.headerHeight}
       >
-        <SelectionModal
-          showModal={showImageTypeModal}
-          onModalDismissPress={() => setShowImageTypeModal(false)}
-          options={imageTypeOptions}
-        />
         <DatePickerModal
           showModal={birthdayActive}
           title="Select a date"
@@ -351,7 +294,7 @@ const SignUpStep2 = ({
         >
           <View style={[styles.topView, styles.$authProfileImage]}>
             <PersonalDisplayView
-              onPhotoPress={() => setShowImageTypeModal(true)}
+              onPhotoPress={handlePhotoPress}
               profileImage={
                 photo || (currentUser ? currentUser.profileImage : null)
               }

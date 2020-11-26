@@ -7,13 +7,11 @@ import ContainerView from '../UI/views/ContainerView';
 import FooterView from '../UI/views/footer/FooterView';
 import IconLabelButton from '../UI/buttons/IconLabelButton';
 import TextButton from '../UI/buttons/TextButton';
-
 import { NAVIGATION_ITEMS } from '../helpers/dataHelper';
 
 import { logout, resetMessages } from '../actions/auth';
 
-import { FLAGGED, DISCOVER, NAVIGATION } from '../config/constants';
-import { userPropType } from '../config/propTypes';
+import { userPropType, userSettingsPropType } from '../config/propTypes';
 
 import styles from './styles';
 
@@ -32,7 +30,7 @@ const Navigation = ({
   };
 
   const handleSelection = (item) => {
-    if (item.title === DISCOVER) {
+    if (item.title === 'Discover') {
       dispatch({ type: 'REMOVE_WALKTHROUGH_COMPLETE' });
     } else {
       // MAKE SURE TO PASS USER
@@ -48,9 +46,9 @@ const Navigation = ({
     // NAVIGATION TO 'WALKTHROUGH' NAVIGATIONSTACK ONLY POSSIBLE AFTER DISPATCH COMPLETES
     // IT IS NOT POSSIBLE TO AWAIT DISPATCH, THEREFORE THIS HACK
     if (!walkthroughComplete) {
-      navigation.navigate(DISCOVER, {
+      navigation.navigate('Discover', {
         ...route.params,
-        fromScreen: NAVIGATION,
+        fromScreen: 'Navigation',
         user: currentUser,
       });
     }
@@ -66,26 +64,15 @@ const Navigation = ({
     );
   }
 
-  const getData = () =>
-    NAVIGATION_ITEMS.filter((item) => {
-      if (item.title === FLAGGED && currentUser.isAdmin) {
-        return true;
-      } else if (item.title === FLAGGED) {
-        return false;
-      }
-      return true;
-    });
-
   return (
     <ContainerView
       hasGradient
       headerHeight={route.params.headerHeight}
       loadingOptions={{ loading: fetching }}
-      touchEnabled={false}
     >
       <AnimatedFlatList
         contentContainerStyle={styles.$navigationInnerContainer}
-        data={getData()}
+        data={NAVIGATION_ITEMS}
         animationType={
           currentUser.settings.enableIntroAnimations
             ? AnimationType.Dive

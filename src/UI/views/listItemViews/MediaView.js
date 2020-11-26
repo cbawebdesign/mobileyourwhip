@@ -1,7 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, createRef, useState } from 'react';
+import {ref} from './MediaViewRef'
 import PropTypes from 'prop-types';
-import { View, Image } from 'react-native';
-import { Video } from 'expo-av';
+import { View, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import  Video  from 'react-native-video';
+// import { Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import {
@@ -16,6 +18,7 @@ import {
 } from '../../../config/propTypes';
 
 import { mediaViewStyles as styles } from './styles';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 // DISPLAYS THE POST'S IMAGES OR VIDEO
 // FOR EACH ITEM INSIDE THE EXPLORE SCREEN
@@ -25,13 +28,19 @@ import { mediaViewStyles as styles } from './styles';
 
 // NOTE: media can be either array of objects (for single or multiple images)
 // or a single object (for video);
+const adTagUrl = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/"
++ "ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp"
++ "&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite"
++ "%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=";
+
 
 const MediaView = ({ media, caption, itemInView, enableAutoPlay }) => {
   let remoteVideoUri;
   let localVideoUri;
 
-  const videoRef = useRef();
-
+  // const videoRef = createRef();
+  const videoRef = ref;
+  const [paused, setPaused] = useState(true);
   // CHECK IF URL TO DISPLAY IS LOCAL FOLDER VIDEO
   if (
     media.uri ||
@@ -125,63 +134,217 @@ const MediaView = ({ media, caption, itemInView, enableAutoPlay }) => {
   );
 
   useEffect(() => {
+    if (!videoRef.current) {
+      return
+    }
     if (!remoteVideoUri) return;
 
-    if (itemInView) {
-      videoRef.current.playAsync();
-    } else {
-      videoRef.current.pauseAsync();
-    }
-  }, [itemInView]);
+    // console.log('videoRefcurrent is', Object.keys(videoRef.current))
+    // if (itemInView) {
+    //   videoRef.current.playAsync();
+    // } else {
+    //   videoRef.current.pauseAsync();
+    // }
+  }, [itemInView, videoRef, videoRef.current]);
+
+  function onLoad(data) {
+    console.log('loaded', data)
+  }
+  const videoStyle = {
+    width: '100%',
+    height: '100%',
+    // controls: {
+    //   backgroundColor: "transparent",
+    //   borderRadius: 5,
+    //   position: 'absolute',
+    //   bottom: 44,
+    //   left: 4,
+    //   right: 4,
+    // },
+
+  }
 
   return (
-    <View style={styles.container}>
-      {remoteVideoUri || localVideoUri ? (
-        <Video
-          ref={videoRef}
-          source={{ uri: remoteVideoUri || localVideoUri }}
-          rate={1.0}
-          volume={1.0}
-          resizeMode="cover"
-          isMuted
-          isLooping
-          style={styles.video}
-          useNativeControls
-          shouldPlay={enableAutoPlay}
-        />
-      ) : (
-        images.map((item, index) => {
-          if (index < 3) {
-            return renderImage(item, index);
-          }
+    <View 
+    // style={workingStyles.container}
+    style={styles.container}
+    >
 
-          return null;
-        })
-      )}
-      {!(remoteVideoUri || localVideoUri) && caption !== '' && (
-        <LinearGradient
-          pointerEvents="none"
-          style={styles.captionGradientView}
-          colors={['black', 'transparent']}
-          start={[0, 1]}
-          end={[0, 0]}
-        >
-          <Text
-            text={caption}
-            fontFamily={BODY_FONT}
-            style={styles.caption}
-            numberOfLines={1}
-          />
-        </LinearGradient>
-      )}
-    </View>
+<View style={{
+  
+  width:"100%",
+  height:"100%",
+  backgroundColor:"red"
+}}>
+      <TouchableWithoutFeedback style={videoStyle} onPress={() => {
+      console.log(paused)
+      if (paused) {
+          setPaused(false)
+        } else {
+           setPaused(true)
+        }
+        console.log(paused)
+      }}>
+        <View style={{width:"100%",
+  height:"100%",
+  backgroundColor:"blue"}}>
+          <Video
+            source={{uri: remoteVideoUri || localVideoUri }} // require('./broadchurch.mp4')}
+            //source={{uri: 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4'}}
+            // source={require('sample-mp4-file.mp4')}
+            ref={videoRef}
+            style={videoStyle}
+            // controls={false}
+           // enableAutoPlay={false}
+            controls={true}
+            // rate={this.state.rate}
+            paused={paused}
+            // volume={this.state.volume}
+            // muted={this.state.muted}
+            // ignoreSilentSwitch={this.state.ignoreSilentSwitch}x
+            // resizeMode={this.state.resizeMode}
+            // onLoad={(data ) => onLoad(data)}
+            // onBuffer={this.onBuffer}
+            // onProgress={this.onProgress}
+            // onEnd={() => { Alert.alert('Done!') }}
+            // repeat={true}
+            // controls={this.state.controls}
+            // filter={this.state.filter}
+            // filterEnabled={this.state.filterEnabled}
+            adTagUrl={adTagUrl}
+          /></View>
+          
+</TouchableWithoutFeedback>
+</View>
+          </View>
+
   );
-};
+        //  <Video
+        //   ref={videoRef}
+        //   source={{ uri: remoteVideoUri || localVideoUri }}
+        //   rate={1.0}
+        //   volume={1.0}
+        //   resizeMode="cover"
+        //   isMuted
+        //   isLooping
+        //   style={styles.video}
+        //   useNativeControls
+        //   shouldPlay={enableAutoPlay}
+        // />
+      // ) : (
+        // images.map((item, index) => {
+        //   if (index < 3) {
+        //     return renderImage(item, index);
+        //   }
 
+        //   return null;
+        // })
+      // )}
+      // {!(remoteVideoUri || localVideoUri) && caption !== '' && (
+      //   <LinearGradient
+      //     pointerEvents="none"
+      //     style={styles.captionGradientView}
+      //     colors={['black', 'transparent']}
+      //     start={[0, 1]}
+      //     end={[0, 0]}
+      //   >
+      //     <Text
+      //       text={caption}
+      //       fontFamily={BODY_FONT}
+      //       style={styles.caption}
+      //       numberOfLines={1}
+      //     />
+      //   </LinearGradient>
+      // )}
+  //   </View>
+  // );
+};
+const workingStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  fullScreen: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
+  controls: {
+    backgroundColor: "transparent",
+    borderRadius: 5,
+    position: 'absolute',
+    bottom: 44,
+    left: 4,
+    right: 4,
+  },
+  progress: {
+    flex: 1,
+    flexDirection: 'row',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  innerProgressCompleted: {
+    height: 20,
+    backgroundColor: '#cccccc',
+  },
+  innerProgressRemaining: {
+    height: 20,
+    backgroundColor: '#2C2C2C',
+  },
+  generalControls: {
+    flex: 1,
+    flexDirection: 'row',
+    overflow: 'hidden',
+    paddingBottom: 10,
+  },
+  skinControl: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  rateControl: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  volumeControl: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  resizeModeControl: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  ignoreSilentSwitchControl: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  controlOption: {
+    alignSelf: 'center',
+    fontSize: 11,
+    color: "white",
+    paddingLeft: 2,
+    paddingRight: 2,
+    lineHeight: 12,
+  },
+  nativeVideoControls: {
+    top: 184,
+    height: 300
+  }
+});
 MediaView.defaultProps = {
   media: null,
   caption: '',
-  enableAutoPlay: false,
+  // enableAutoPlay: true,
 };
 
 MediaView.propTypes = {
@@ -201,7 +364,8 @@ MediaView.propTypes = {
     }),
   ]),
   caption: PropTypes.string,
-  enableAutoPlay: PropTypes.bool,
+//  enableAutoPlay: PropTypes.bool,
 };
 
 export default MediaView;
+

@@ -43,7 +43,7 @@ const Settings = ({
         title: 'Continue',
         onPress: () => {
           setShowModal(false);
-          dispatch(deleteAccount(currentUser._id, 'SETTINGS'));
+          dispatch(deleteAccount(currentUser._id));
         },
       },
       {

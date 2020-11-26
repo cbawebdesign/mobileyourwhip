@@ -7,17 +7,10 @@ import { iconButtonStyles as styles } from './styles';
 const IconButton = ({ onPress, icon, tintColor, size }) => (
   <TouchableOpacity onPress={onPress} activeOpacity={0.6}>
     <View style={styles.container}>
-      {typeof icon === 'object' ? (
-        <Image
-          source={icon}
-          style={[styles.image, { width: size, height: size }]}
-        />
-      ) : (
-        <Image
-          source={icon}
-          style={[styles.image, { tintColor, width: size, height: size }]}
-        />
-      )}
+      <Image
+        source={icon}
+        style={[styles.image, { tintColor, width: size, height: size }]}
+      />
     </View>
   </TouchableOpacity>
 );

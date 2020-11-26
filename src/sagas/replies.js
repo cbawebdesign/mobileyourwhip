@@ -70,9 +70,6 @@ export function* getReplyFeed(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: REPLY_FEED_ERROR, error: result.error });
     } else {
       yield put({ type: REPLY_FEED_RESULT, result });
@@ -90,9 +87,6 @@ export function* likeReplyPress(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: LIKE_REPLY_PRESS_ERROR, error: result.error });
     } else {
       yield put({ type: LIKE_REPLY_PRESS_RESULT, result });
@@ -122,9 +116,6 @@ export function* composeReply(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: NEW_REPLY_ERROR, error: result.error });
     } else {
       yield put({ type: NEW_REPLY_RESULT, result });
@@ -142,9 +133,6 @@ export function* deleteReply(action) {
     const result = yield response.json();
 
     if (result.error) {
-      if (result.type === 'INVALID_TOKEN') {
-        yield put({ type: 'INVALID_TOKEN' });
-      }
       yield put({ type: DELETE_REPLY_ERROR, error: result.error });
     } else {
       yield put({ type: DELETE_REPLY_RESULT, result });
